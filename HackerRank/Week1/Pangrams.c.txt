@@ -1,4 +1,4 @@
-Time Conversion.c
+Pangrams.c
 
 #include <assert.h>
 #include <ctype.h>
@@ -14,7 +14,7 @@ Time Conversion.c
 char* readline();
 
 /*
- * Complete the 'timeConversion' function below.
+ * Complete the 'pangrams' function below.
  *
  * The function is expected to return a STRING.
  * The function accepts STRING s as parameter.
@@ -39,20 +39,25 @@ char* readline();
  * }
  *
  */
-char* timeConversion(char* s) {
-    static char result[9];
-    int hour;
-    sscanf(s, "%2d", &hour);
-    if (s[8] == 'A') {
-        if (hour == 12)
-        hour = 0;
-        } else {
-            if (hour != 12)
-            hour += 12;
-            }
-            snprintf(result, sizeof(result), "%02d:%c%c:%c%c", hour, s[3], s[4], s[6], s[7]);
-            return result;
-            }
+char* pangrams(char* s) {
+    bool letters[26] = {false};
+    int index;
+    for (int i = 0; s[i] != '\0'; i++) {
+        if (isalpha(s[i])) {
+            index = tolower(s[i]) - 'a';
+            letters[index] = true;
+        }
+    }
+    for (int i = 0; i < 26; i++) {
+        if (!letters[i]) {
+            return "not pangram";
+        }
+    }
+
+    return "pangram";
+
+
+}
 
 int main()
 {
@@ -60,7 +65,7 @@ int main()
 
     char* s = readline();
 
-    char* result = timeConversion(s);
+    char* result = pangrams(s);
 
     fprintf(fptr, "%s\n", result);
 

@@ -1,4 +1,4 @@
-Plus Minus.c
+Permuting Two Arrays.c
 
 #include <assert.h>
 #include <ctype.h>
@@ -17,44 +17,92 @@ char* rtrim(char*);
 char** split_string(char*);
 
 int parse_int(char*);
+int cmp_asc(const void *a, const void *b){
+    int va = *(const int*)a;
+    int vb = *(const int*)b;
+    return(va > vb)-(va < vb);
+}
 
 /*
- * Complete the 'plusMinus' function below.
+ * Complete the 'twoArrays' function below.
  *
- * The function accepts INTEGER_ARRAY arr as parameter.
+ * The function is expected to return a STRING.
+ * The function accepts following parameters:
+ *  1. INTEGER k
+ *  2. INTEGER_ARRAY A
+ *  3. INTEGER_ARRAY B
  */
 
-void plusMinus(int arr_count, int* arr) {
-    int positive = 0, negative = 0, zero = 0;
-    for (int i = 0; i < arr_count; i++) {
-        if (arr[i] > 0)
-        positive++;
-        else if (arr[i] < 0)
-        negative++;
-        else
-            zero++;
-            }
-            
-    printf("%.6f\n", (double)positive / arr_count);
-    printf("%.6f\n", (double)negative / arr_count);
-    printf("%.6f\n", (double)zero / arr_count);
+/*
+ * To return the string from the function, you should either do static allocation or dynamic allocation
+ *
+ * For example,
+ * char* return_string_using_static_allocation() {
+ *     static char s[] = "static allocation of string";
+ *
+ *     return s;
+ * }
+ *
+ * char* return_string_using_dynamic_allocation() {
+ *     char* s = malloc(100 * sizeof(char));
+ *
+ *     s = "dynamic allocation of string";
+ *
+ *     return s;
+ * }
+ *
+ */
+char* twoArrays(int k, int A_count, int* A, int B_count, int* B) {
+    qsort(A, A_count, sizeof(int), cmp_asc);
+    qsort(B, B_count, sizeof(int), cmp_asc);
+    for(int i=0;i<A_count;i++){
+        if(A[i]+B[B_count-1-i]<k){
+            return "NO";
+        }
+    }
+    return "YES";
+
 }
 
 int main()
 {
-    int n = parse_int(ltrim(rtrim(readline())));
+    FILE* fptr = fopen(getenv("OUTPUT_PATH"), "w");
 
-    char** arr_temp = split_string(rtrim(readline()));
+    int q = parse_int(ltrim(rtrim(readline())));
 
-    int* arr = malloc(n * sizeof(int));
+    for (int q_itr = 0; q_itr < q; q_itr++) {
+        char** first_multiple_input = split_string(rtrim(readline()));
 
-    for (int i = 0; i < n; i++) {
-        int arr_item = parse_int(*(arr_temp + i));
+        int n = parse_int(*(first_multiple_input + 0));
 
-        *(arr + i) = arr_item;
+        int k = parse_int(*(first_multiple_input + 1));
+
+        char** A_temp = split_string(rtrim(readline()));
+
+        int* A = malloc(n * sizeof(int));
+
+        for (int i = 0; i < n; i++) {
+            int A_item = parse_int(*(A_temp + i));
+
+            *(A + i) = A_item;
+        }
+
+        char** B_temp = split_string(rtrim(readline()));
+
+        int* B = malloc(n * sizeof(int));
+
+        for (int i = 0; i < n; i++) {
+            int B_item = parse_int(*(B_temp + i));
+
+            *(B + i) = B_item;
+        }
+
+        char* result = twoArrays(k, n, A, n, B);
+
+        fprintf(fptr, "%s\n", result);
     }
 
-    plusMinus(n, arr);
+    fclose(fptr);
 
     return 0;
 }
