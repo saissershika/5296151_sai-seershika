@@ -1,0 +1,50 @@
+Prime Dates.c
+
+#include <stdio.h>
+
+int isLeapYear(int year) {
+    return (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0);
+}
+
+int getDaysInMonth(int month, int year) {
+    int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (month == 2 && isLeapYear(year)) {
+        return 29;
+    }
+    return days[month - 1];
+}
+
+int isLuckyDate(int day, int month, int year) {
+    int x = day * 1000000 + month * 10000 + year;
+    return (x % 4 == 0) || (x % 7 == 0);
+}
+
+int main() {
+    int d1, m1, y1;
+    int d2, m2, y2;
+    scanf("%d-%d-%d", &d1, &m1, &y1);
+    scanf("%d-%d-%d", &d2, &m2, &y2);
+
+    int count = 0;
+
+    while (1) {
+        if (isLuckyDate(d1, m1, y1)) {
+            count++;
+        }
+        if (d1 == d2 && m1 == m2 && y1 == y2) {
+            break;
+        }
+        d1++;
+        if (d1 > getDaysInMonth(m1, y1)) {
+            d1 = 1;
+            m1++;
+            if (m1 > 12) {
+                m1 = 1;
+                y1++;
+            }
+        }
+    }
+
+    printf("%d\n", count);
+    return 0;
+}

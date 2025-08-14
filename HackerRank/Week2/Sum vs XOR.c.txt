@@ -1,0 +1,24 @@
+Sum vs XOR.c
+
+#include <stdio.h>
+
+int main() {
+    unsigned long long n;
+    scanf("%llu", &n);
+    if (n == 0) {
+        printf("1\n");
+        return 0;
+    }
+
+    int zeroBits = 0;
+    while (n > 0) {
+        if ((n & 1ULL) == 0) {
+            zeroBits++;
+        }
+        n >>= 1;
+    }
+    unsigned long long result = 1ULL << zeroBits;
+    printf("%llu\n", result);
+
+    return 0;
+}
