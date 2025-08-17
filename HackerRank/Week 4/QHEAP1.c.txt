@@ -1,0 +1,85 @@
+QHEAP1.c
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100000
+
+int heap[MAX];
+int size = 0;
+
+
+void swap(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+
+void heapifyUp(int i) {
+    while (i > 0 && heap[(i - 1) / 2] > heap[i]) {
+        swap(&heap[i], &heap[(i - 1) / 2]);
+        i = (i - 1) / 2;
+    }
+}
+
+
+void heapifyDown(int i) {
+    int smallest = i;
+    int left = 2*i + 1;
+    int right = 2*i + 2;
+
+    if (left < size && heap[left] < heap[smallest]) smallest = left;
+    if (right < size && heap[right] < heap[smallest]) smallest = right;
+
+    if (smallest != i) {
+        swap(&heap[i], &heap[smallest]);
+        heapifyDown(smallest);
+    }
+}
+
+void insert(int val) {
+    heap[size++] = val;
+    heapifyUp(size-1);
+}
+
+void delete(int val) {
+   
+    int i;
+    for (i = 0; i < size; i++) {
+        if (heap[i] == val) break;
+    }
+    if (i == size) return;  
+
+   
+    swap(&heap[i], &heap[size-1]);
+    size--;
+
+    
+    heapifyUp(i);
+    heapifyDown(i);
+}
+
+int getMin() {
+    if (size == 0) return -1; 
+    return heap[0];
+}
+
+int main() {
+    int Q;
+    scanf("%d", &Q);
+    while(Q--) {
+        int op, val;
+        scanf("%d", &op);
+        if (op == 1) {
+            scanf("%d", &val);
+            insert(val);
+        } else if (op == 2) {
+            scanf("%d", &val);
+            delete(val);
+        } else if (op == 3) {
+            printf("%d\n", getMin());
+        }
+    }
+    return 0;
+}
